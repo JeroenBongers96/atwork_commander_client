@@ -2,21 +2,14 @@
 
 <launch>
   <arg name="refbox" default="atwork_commander"/>
-  <arg name="team" default="RoboHub_Eindhoven"/>
-  <arg name="robot" default="Suii"/>
-  <arg name="multimaster" default="true"/>
+  <arg name="team" default="RoboHubEindhoven"/>
+  <arg name="robot" default="suii"/>
+  <arg name="multimaster" default="false"/>
   <arg name="output" default="log"/>
-  <arg name="object_centric" default="false"/>
 
   <group ns="$(arg team)">
 
-    <node pkg="atwork_commander_client" type="suii_arena_centric" name="$(arg robot)" output="$(arg output)" unless="$(arg object_centric)">
-      <param name="refboxName" value="$(arg refbox)"/>
-      <param name="teamName" value="$(arg team)"/>
-      <param name="robotName" value="$(arg robot)"/>
-    </node>
-
-    <node pkg="atwork_commander_client" type="suii_object_centric" name="$(arg robot)" output="$(arg output)" if="$(arg object_centric)">
+    <node pkg="atwork_commander_client" type="robot_client_node.py" name="$(arg robot)" output="$(arg output)">
       <param name="refboxName" value="$(arg refbox)"/>
       <param name="teamName" value="$(arg team)"/>
       <param name="robotName" value="$(arg robot)"/>
