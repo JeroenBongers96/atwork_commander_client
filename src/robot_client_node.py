@@ -4,8 +4,15 @@ import rospy
 from atwork_commander_msgs.msg import RobotState
 from atwork_commander_msgs.msg import Task
 
+task_list = []
+
 def task_callback(msg):
-    rospy.loginfo(msg)
+    task_list.clear()
+    for state in msg.arena_start_state:
+        task_list.append(state.workstation_name)
+    for state in msg.arena_target_state:
+        task_list.append(state.workstation_name)
+    task_list.append("END_WS")
 
 if __name__ == "__main__":
     rospy.init_node("suii_refbox_client", anonymous=True)
@@ -40,6 +47,7 @@ if __name__ == "__main__":
             robot_state.path.header.frame_id = "map"
             robot_state.path.poses = [] # An array of poses (PoseStamped) that represents a Path for a robot to follow
             state_pub.publish(robot_state)
+            print(task_list)
             rate.sleep()
         except rospy.ROSInterruptException:
             break
