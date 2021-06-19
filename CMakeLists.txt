@@ -11,7 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  atwork_commander_msgs
+  pluginlib
+  atwork_commander_msgs REQUIRED
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,9 +105,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES atwork_commander_client
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+  INCLUDE_DIRS include
+#  LIBRARIES atwork_refbox_com
+  CATKIN_DEPENDS pluginlib
 #  DEPENDS system_lib
 )
 
@@ -117,7 +118,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -205,3 +206,13 @@ catkin_install_python(PROGRAMS
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+add_executable(suii_arena_centric src/robot_example_arena_centric.cpp)
+add_executable(suii_object_centric src/robot_example_object_centric.cpp)
+
+add_dependencies(suii_arena_centric ${catkin_EXPORTED_TARGETS})
+add_dependencies(suii_object_centric ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(suii_arena_centric ${catkin_LIBRARIES})
+target_link_libraries(suii_object_centric ${catkin_LIBRARIES})
