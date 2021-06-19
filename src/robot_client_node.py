@@ -24,7 +24,7 @@ if __name__ == "__main__":
     task_sub = rospy.Subscriber("/"+refboxName+"/task", Task, task_callback, queue_size=1)
     state_pub = rospy.Publisher("/"+refboxName+"/robot_state", RobotState, queue_size=1)
 
-    robot_state = RobotState
+    robot_state = RobotState()
     robot_state.sender.team_name = teamName
     robot_state.sender.robot_name = robotName
 

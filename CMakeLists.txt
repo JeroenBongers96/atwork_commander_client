@@ -108,7 +108,7 @@ catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES atwork_refbox_com
   CATKIN_DEPENDS pluginlib
-#  DEPENDS system_lib
+  DEPENDS atwork_commander_msgs
 )
 
 ###########
