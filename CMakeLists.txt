@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   pluginlib
-  atwork_commander_msgs
+  atwork_commander_msgs REQUIRED
 )
 
 ## System dependencies are found with CMake's conventions
@@ -208,11 +208,11 @@ include_directories(
 # catkin_add_nosetests(test)
 
 
-add_executable(robot_example_arena_centric src/robot_example_arena_centric.cpp)
-add_executable(robot_example_object_centric src/robot_example_object_centric.cpp)
+add_executable(suii_arena_centric src/robot_example_arena_centric.cpp)
+add_executable(suii_object_centric src/robot_example_object_centric.cpp)
 
-add_dependencies(robot_example_arena_centric ${catkin_EXPORTED_TARGETS} atwork_commander_msgs)
-add_dependencies(robot_example_object_centric ${catkin_EXPORTED_TARGETS} atwork_commander_msgs)
+add_dependencies(suii_arena_centric ${catkin_EXPORTED_TARGETS})
+add_dependencies(suii_object_centric ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(robot_example_arena_centric ${catkin_LIBRARIES})
-target_link_libraries(robot_example_object_centric ${catkin_LIBRARIES})
+target_link_libraries(suii_arena_centric ${catkin_LIBRARIES})
+target_link_libraries(suii_object_centric ${catkin_LIBRARIES})
