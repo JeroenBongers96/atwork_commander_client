@@ -5,7 +5,7 @@
   <arg name="team" default="RoboHubEindhoven"/>
   <arg name="robot" default="suii"/>
   <arg name="multimaster" default="false"/>
-  <arg name="output" default="log"/>
+  <arg name="output" default="screen"/>
 
   <group ns="$(arg team)">
 
