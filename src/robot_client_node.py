@@ -33,8 +33,13 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         try:
             robot_state.sender.header.stamp = rospy.Time.now()
+            robot_state.pose.x = 0.0 #robot.getPose().x (for example)
+            robot_state.pose.y = 0.0 #robot.getPose().y (for example)
+            robot_state.pose.theta = 0.0 #robot.getPose().a (for example)
+            robot_state.path.header.stamp = rospy.Time.now()
+            robot_state.path.header.frame_id = "map"
+            robot_state.path.poses = [] # An array of poses (PoseStamped) that represents a Path for a robot to follow
             state_pub.publish(robot_state)
-            rospy.spin()
             rate.sleep()
         except rospy.ROSInterruptException:
             break
