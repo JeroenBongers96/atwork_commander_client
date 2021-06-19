@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   pluginlib
   atwork_commander_msgs REQUIRED
+  suii_communication_ros1 REQUIRED
 )
 
 ## System dependencies are found with CMake's conventions
@@ -57,10 +58,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-  TableGoal.srv
-)
+#  add_service_files(
+#   FILES
+#   TableGoal.srv
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -70,10 +71,10 @@ add_service_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -107,7 +108,7 @@ add_service_files(
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES atwork_refbox_com
-  CATKIN_DEPENDS pluginlib
+  CATKIN_DEPENDS pluginlib std_msgs
   DEPENDS atwork_commander_msgs
 )
 
@@ -163,6 +164,7 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   src/robot_client_node.py
+  src/table_goal_test.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

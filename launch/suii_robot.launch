@@ -9,7 +9,7 @@
 
   <group ns="$(arg team)">
 
-    <node pkg="atwork_commander_client" type="robot_client_node.py" name="$(arg robot)" output="$(arg output)">
+    <node pkg="atwork_commander_client" type="robot_client_node.py" name="$(arg robot)" output="screen">
       <param name="refboxName" value="$(arg refbox)"/>
       <param name="teamName" value="$(arg team)"/>
       <param name="robotName" value="$(arg robot)"/>
