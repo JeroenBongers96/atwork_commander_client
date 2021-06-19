@@ -59,6 +59,11 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 
+  <depend>pluginlib</depend>
+  <depend>atwork_commander_msgs</depend>
+  <exec_depend>fkie_master_discovery</exec_depend>
+  <exec_depend>fkie_master_sync</exec_depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
