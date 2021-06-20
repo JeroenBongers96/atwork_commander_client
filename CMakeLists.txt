@@ -208,13 +208,3 @@ catkin_install_python(PROGRAMS
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-
-add_executable(suii_arena_centric src/robot_example_arena_centric.cpp)
-add_executable(suii_object_centric src/robot_example_object_centric.cpp)
-
-add_dependencies(suii_arena_centric ${catkin_EXPORTED_TARGETS})
-add_dependencies(suii_object_centric ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(suii_arena_centric ${catkin_LIBRARIES})
-target_link_libraries(suii_object_centric ${catkin_LIBRARIES})

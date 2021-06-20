@@ -7,56 +7,69 @@ from suii_communication_ros1.srv import TableGoal
 
 task_list = []
 
-def task_callback(msg):
-    print("=======================")
-    task_list = []
-    for state in msg.arena_start_state:
-        task_list.append(state.workstation_name)
-    for state in msg.arena_target_state:
-        task_list.append(state.workstation_name)
-    task_list.append("END_WS")
-    print(task_list)
+class SendTableGoal:
+    def __init__(self):
+        print("waiting for service table_goal...")
+        rospy.wait_for_service('table_goal')
+        self.table_goal = rospy.ServiceProxy('table_goal', TableGoal)
+        print("table_goal found")
 
-    #TODO: Use table_goal service to send goal
-    # print("start waiting")
-    # rospy.wait_for_service('suii_communication_ros1/TableGoal')
-    # print("done waiting")
-    # try:
-    #     exe_goal = rospy.ServiceProxy('suii_communication_ros1/TableGoal', TableGoal)
-    #     resp1 = exe_goal("WS01")
-    #     print(resp1.succes) 
-    # except rospy.ServiceException as e:
-    #     print("Service call failed: %s"%e)
+        rospy.init_node("suii_refbox_client", anonymous=True)
+
+        refboxName = "atwork_commander"
+        teamName = "RoboHubEindhoven"
+        robotName = "suii"
+
+        if (rospy.get_param('~refboxName') != refboxName):
+            rospy.WARN("Incorrect refbox name")
+        if (rospy.get_param('~teamName') != teamName):
+            rospy.WARN("Incorrect team name")
+        if(rospy.get_param('~robotName') != robotName):
+            rospy.WARN("Incorrect robot name")
+
+        self.robot_state = RobotState()
+        self.robot_state.sender.team_name = teamName
+        self.robot_state.sender.robot_name = robotName
+
+        task_sub = rospy.Subscriber("/"+refboxName+"/task", Task, self.task_callback, queue_size=1)
+        self.state_pub = rospy.Publisher("/"+refboxName+"/robot_state", RobotState, queue_size=1)
     
-    #TODo: Respond to refbox that test is finished
+    def send_goal(self, table):
+        try:
+            resp = self.table_goal(table)
+            print("Goal achieved: {}".format(resp.succes))
+            return resp.succes
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+
+    def task_callback(self, msg):
+        print("=======================")
+        task_list = []
+        for state in msg.arena_start_state:
+            task_list.append(state.workstation_name)
+        for state in msg.arena_target_state:
+            task_list.append(state.workstation_name)
+        task_list.append("END_WS")
+        print(task_list)
+
+        for goal in task_list:
+            print("Going to: {}".format(goal))
+            self.send_goal("TEST_GOAL") 
+                    
+        #TODo: Respond to refbox that test is finished and shut down script!!!!! Otherwise it will keep looping.
+
+    def run(self):
+        rate = rospy.Rate(2)
+        while not rospy.is_shutdown():
+            try:
+                self.robot_state.sender.header.stamp = rospy.Time.now()
+                self.state_pub.publish(self.robot_state)
+                rate.sleep()
+            except rospy.ROSInterruptException:
+                break
+        
 
 if __name__ == "__main__":
-    rospy.init_node("suii_refbox_client", anonymous=True)
-
-    refboxName = "atwork_commander"
-    teamName = "RoboHubEindhoven"
-    robotName = "suii"
-
-    if (rospy.get_param('~refboxName') != refboxName):
-        rospy.WARN("Incorrect refbox name")
-    if (rospy.get_param('~teamName') != teamName):
-        rospy.WARN("Incorrect team name")
-    if(rospy.get_param('~robotName') != robotName):
-        rospy.WARN("Incorrect robot name")
-
-    task_sub = rospy.Subscriber("/"+refboxName+"/task", Task, task_callback, queue_size=1)
-    state_pub = rospy.Publisher("/"+refboxName+"/robot_state", RobotState, queue_size=1)
-
-    robot_state = RobotState()
-    robot_state.sender.team_name = teamName
-    robot_state.sender.robot_name = robotName
-
-    rate = rospy.Rate(2)
-
-    while not rospy.is_shutdown():
-        try:
-            robot_state.sender.header.stamp = rospy.Time.now()
-            state_pub.publish(robot_state)
-            rate.sleep()
-        except rospy.ROSInterruptException:
-            break
+    run_class = SendTableGoal()
+    run_class.run()
+    
