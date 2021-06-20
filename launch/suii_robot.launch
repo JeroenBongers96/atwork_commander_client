@@ -7,14 +7,13 @@
   <arg name="multimaster" default="false"/>
   <arg name="output" default="screen"/>
 
+  <node pkg="atwork_commander_client" type="robot_client_node.py" name="$(arg robot)" output="screen">
+    <param name="refboxName" value="$(arg refbox)"/>
+    <param name="teamName" value="$(arg team)"/>
+    <param name="robotName" value="$(arg robot)"/>
+  </node>
+  
   <group ns="$(arg team)">
-
-    <node pkg="atwork_commander_client" type="robot_client_node.py" name="$(arg robot)" output="$(arg output)">
-      <param name="refboxName" value="$(arg refbox)"/>
-      <param name="teamName" value="$(arg team)"/>
-      <param name="robotName" value="$(arg robot)"/>
-    </node>
-
   <include file="$(find atwork_commander_com)launch/multimaster.launch" if="$(arg multimaster)">
     <arg name="output" value="$(arg output)"/>
     <arg name="refbox" value="$(arg refbox)"/>
